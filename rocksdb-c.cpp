@@ -2,14 +2,14 @@
 #include "rocksdb/db.h"
 #include <string>
 
-extern "C" void* open(const char *name)
+extern "C" void* rocksdb_open(const char *name)
 {
     rocksdb::DB* db;
     std::string name_str(name);
     
     rocksdb::Options options;
     
-    options.create_if_missing = true;    
+    options.create_if_missing = true;
     
     rocksdb::Status status = rocksdb::DB::Open(options, name_str, &db);
     
@@ -20,7 +20,7 @@ extern "C" void* open(const char *name)
     }
 }
 
-extern "C" bool get(void *db, const char *key, char **value, int *value_size)
+extern "C" int rocksdb_get(void *db, const char *key, char **value, int *value_size)
 {
     rocksdb::DB* dbh = reinterpret_cast<rocksdb::DB*>(db);
     rocksdb::Slice key_slice(key);
@@ -32,12 +32,13 @@ extern "C" bool get(void *db, const char *key, char **value, int *value_size)
     
     *value = reinterpret_cast<char*>(malloc(value_str.size()+1));
     
-    memcpy(*value, value_str.c_str(), value_str.size());    
+    memcpy(*value, value_str.c_str(), value_str.size());
+    value[value_str.size()] = 0;
     
     return status.ok();
 }
 
-extern "C" bool put(void *db, const char *key, const char *value)
+extern "C" int rocksdb_put(void *db, const char *key, const char *value)
 {
     rocksdb::DB* dbh = reinterpret_cast<rocksdb::DB*>(db);
     rocksdb::Slice key_slice(key);
@@ -48,7 +49,7 @@ extern "C" bool put(void *db, const char *key, const char *value)
     return status.ok();
 }
 
-extern "C" bool del(void *db, const char *key)
+extern "C" int rocksdb_delete(void *db, const char *key)
 {
     rocksdb::DB* dbh = reinterpret_cast<rocksdb::DB*>(db);
     rocksdb::Slice key_slice(key);
@@ -58,7 +59,7 @@ extern "C" bool del(void *db, const char *key)
     return status.ok();
 }
 
-extern "C" bool close(void *db)
+extern "C" int rocksdb_close(void *db)
 {
     rocksdb::DB* dbh = reinterpret_cast<rocksdb::DB*>(db);
     

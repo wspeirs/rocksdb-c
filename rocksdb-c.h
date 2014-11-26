@@ -4,26 +4,26 @@
 #ifdef __cplusplus
 extern "C"
 #endif
-void* open(const char *name);
+void* rocksdb_open(const char *name);
 
 #ifdef __cplusplus
 extern "C"
 #endif
-bool get(void *db, const char *key, char **value, int *value_size);
+int rocksdb_get(void *db, const char *key, char **value, int *value_size);
 
 #ifdef __cplusplus
 extern "C"
 #endif
-bool put(void *db, const char *key, const char *value);
+int rocksdb_put(void *db, const char *key, const char *value);
 
 #ifdef __cplusplus
 extern "C"
 #endif
-bool del(void *db, const char *key);
+int rocksdb_delete(void *db, const char *key);
 
 #ifdef __cplusplus
 extern "C"
 #endif
-bool close(void *db);
+int rocksdb_close(void *db);
 
 #endif
