@@ -9,7 +9,7 @@ void* rocksdb_open(const char *name);
 #ifdef __cplusplus
 extern "C"
 #endif
-int rocksdb_get(void *db, const char *key, char **value, int *value_size);
+int rocksdb_get(void *db, const char *key, char **value);
 
 #ifdef __cplusplus
 extern "C"
